@@ -17,13 +17,14 @@ raw_text = st.text_area("Input Text", height=300)
 def parse_text(text):
     lines = text.splitlines()
     rows = []
+    current_row_index = None
 
     for line in lines:
         line = line.strip()
         if not line:
             continue
 
-        # Look for CPT code (5 digits)
+        # --- CPT line detection ---
         cpt_match = re.search(r"\b\d{5}\b", line)
         date_match = re.search(r"\b\d{1,2}/\d{1,2}/\d{4}\b", line)
 
@@ -42,8 +43,19 @@ def parse_text(text):
                 "Date": date,
                 "CPT Code": cpt,
                 "Modifiers": modifier,
+                "ICD10 Code": "",
                 "Description": description
             })
+
+            current_row_index = len(rows) - 1
+            continue
+
+        # --- Associated Dx line detection ---
+        if "Associated Dx" in line and current_row_index is not None:
+            # Extract only ICD10 codes inside brackets
+            codes = re.findall(r"\[([A-Z0-9\.]+)\]", line)
+            if codes:
+                rows[current_row_index]["ICD10 Code"] = ", ".join(codes)
 
     return pd.DataFrame(rows)
 
