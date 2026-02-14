@@ -36,15 +36,11 @@ def parse_text(text):
             modifier_match = re.search(r"\b([A-Z]{2}|\d{2})\b", line.split(date)[-1])
             modifier = modifier_match.group() if modifier_match else ""
 
-            # Description is text before CPT code
-            description = line.split(cpt)[0].strip()
-
             rows.append({
                 "Date": date,
                 "CPT Code": cpt,
                 "Modifiers": modifier,
-                "ICD10 Code": "",
-                "Description": description
+                "ICD10 Code": ""
             })
 
             current_row_index = len(rows) - 1
@@ -52,7 +48,6 @@ def parse_text(text):
 
         # --- Associated Dx line detection ---
         if "Associated Dx" in line and current_row_index is not None:
-            # Extract only ICD10 codes inside brackets
             codes = re.findall(r"\[([A-Z0-9\.]+)\]", line)
             if codes:
                 rows[current_row_index]["ICD10 Code"] = ", ".join(codes)
@@ -81,7 +76,7 @@ if st.button("Generate Table"):
             table.setStyle(TableStyle([
                 ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
                 ('GRID', (0, 0), (-1, -1), 1, colors.black),
-                ('ALIGN', (1, 1), (-1, -1), 'CENTER'),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
             ]))
 
             elements = [table]
