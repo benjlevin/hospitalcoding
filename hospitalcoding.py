@@ -101,6 +101,6 @@ if st.button("Generate Table"):
             st.download_button(
                 label="Download PDF",
                 data=buffer,
-                file_name=f"{safe_file_name}.pdf",
+                file_name=f"{pdf_title}.pdf",
                 mime="application/pdf"
             )
