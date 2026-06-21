@@ -96,7 +96,7 @@ if st.button("Generate Table"):
 
             buffer.seek(0)
 
-            safe_file_name = re.sub(r"[^A-Za-z0-9_-]+", "_", pdf_title)
+            # safe_file_name = re.sub(r"[^A-Za-z0-9_-]+", "_", pdf_title)
 
             st.download_button(
                 label="Download PDF",
